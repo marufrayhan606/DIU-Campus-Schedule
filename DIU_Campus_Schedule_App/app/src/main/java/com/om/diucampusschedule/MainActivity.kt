@@ -36,5 +36,7 @@ fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "class_routine"){
         composable("class_routine"){ ClassRoutinePage(navController) }  // This is the starting page
         composable("tasks"){ TasksPage(navController) }  // This is the second page
+        composable("settings"){ SettingsPage(navController) }  // This is the third page}
     }
 }
+
