@@ -4,6 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
@@ -22,7 +24,8 @@ fun BottomNavigationBar(navController: NavController) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.class_routine_icon),
-                    contentDescription = "Class Routine"
+                    contentDescription = "Class Routine",
+                    modifier = Modifier.scale(0.8f)
                 )
            },
             label = { Text("Class Routine") },
@@ -37,7 +40,8 @@ fun BottomNavigationBar(navController: NavController) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.tasks_icon),
-                    contentDescription = "Tasks"
+                    contentDescription = "Tasks",
+                    modifier = Modifier.scale(0.8f)
                 )
             },
             label = { Text("Tasks") },
@@ -52,7 +56,8 @@ fun BottomNavigationBar(navController: NavController) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.settings_icon),
-                    contentDescription = "Settings"
+                    contentDescription = "Settings",
+                    modifier = Modifier.scale(0.8f)
                 )
             },
             label = { Text("Settings") },

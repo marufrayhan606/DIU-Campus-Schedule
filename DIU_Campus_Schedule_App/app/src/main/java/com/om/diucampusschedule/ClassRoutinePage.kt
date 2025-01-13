@@ -50,7 +50,19 @@ fun ClassRoutinePage(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Search Button
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Search")
+            }
 
             // Image of the class routine here
         }
