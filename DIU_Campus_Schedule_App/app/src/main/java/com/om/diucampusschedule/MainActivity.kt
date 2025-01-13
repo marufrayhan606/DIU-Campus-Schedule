@@ -11,6 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +24,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DIUCampusScheduleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val navController = rememberNavController()
+                NavGraph(navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DIUCampusScheduleTheme {
-        Greeting("Android")
+fun NavGraph(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "class_routine"){
+        composable("class_routine"){ ClassRoutinePage(navController) }  // This is the starting page
+        composable("tasks"){ TasksPage(navController) }  // This is the second page
     }
 }
