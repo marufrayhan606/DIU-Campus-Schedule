@@ -27,8 +27,8 @@ fun BottomNavigationBar(navController: NavController) {
            },
             label = { Text("Class Routine") },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.primary,
-                unselectedIconColor = Color.Black
+                selectedIconColor = Color.Black,
+                unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
         NavigationBarItem(
@@ -42,8 +42,8 @@ fun BottomNavigationBar(navController: NavController) {
             },
             label = { Text("Tasks") },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.primary,
-                unselectedIconColor = Color.Black
+                selectedIconColor = Color.Black,
+                unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
         NavigationBarItem(
@@ -57,8 +57,8 @@ fun BottomNavigationBar(navController: NavController) {
             },
             label = { Text("Settings") },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.primary,
-                unselectedIconColor = Color.Black
+                selectedIconColor = Color.Black,
+                unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
     }
