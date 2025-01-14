@@ -1,27 +1,262 @@
 package com.om.diucampusschedule
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.om.diucampusschedule.models.Tasks
+import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TasksPage(navController: NavHostController) {
+    var taskList by remember {
+        mutableStateOf(
+            listOf(
+                Tasks(1, "Task 1", "Description 1", "2025-01-15", "10:00 AM", false),
+                Tasks(2, "Task 2", "Description 2", "2025-01-16", "11:00 AM", true)
+            )
+        )
+    }
+    var taskIdCounter by remember { mutableStateOf(taskList.size + 1) }
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Tasks") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(navController)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.White
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Task")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            items(taskList) { task ->
+                TaskCard(task = task, onUpdateTask = { updatedTask ->
+                    taskList = taskList.map { if (it.id == task.id) updatedTask else it }
+                })
+            }
+        }
+    }
+
+    if (showDialog) {
+        AddTaskDialog(
+            onDismiss = { showDialog = false },
+            onAddTask = { newTask ->
+                taskList = taskList + newTask.copy(id = taskIdCounter)
+                taskIdCounter++
+                showDialog = false
+            }
+        )
+    }
+}
 
 @Composable
-fun TasksPage(navController: NavHostController){
-    // This is the second page
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(text = "Tasks Page", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary, fontSize = 28.sp)
+fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
 
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { expanded = !expanded },
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = task.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 18.sp,
+                    modifier = Modifier.weight(1f),
+                    maxLines = 1 // Ensuring title is displayed in a single line
+                )
+                val animatedColor by animateColorAsState(
+                    targetValue = if (task.isCompleted) Color(0xFF1976D2) else Color.Gray,
+                    animationSpec = tween(500)
+                )
+                val scale by animateFloatAsState(
+                    targetValue = if (task.isCompleted) 1.2f else 1f,
+                    animationSpec = tween(500)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(40.dp) // Increase the clickable area
+                        .background(
+                            color = if (task.isCompleted) Color(0xFFE3F2FD) else Color.Transparent,
+                            shape = CircleShape
+                        )
+                        .clickable {
+                            onUpdateTask(task.copy(isCompleted = !task.isCompleted))
+                        }
+                        .scale(scale),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (task.isCompleted) Icons.Filled.Check else Icons.Outlined.CheckCircle,
+                        contentDescription = "Check",
+                        tint = animatedColor,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
+                exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = task.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 14.sp
+                    )
+                    if (task.date.isNotEmpty() && task.time.isNotEmpty()) {
+                        Text(
+                            text = "${task.date} at ${task.time}",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Tasks) -> Unit) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        ) {
+            Card(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    var title by remember { mutableStateOf("") }
+                    var description by remember { mutableStateOf("") }
+                    var date by remember { mutableStateOf("") }
+                    var time by remember { mutableStateOf("") }
+
+                    OutlinedTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text("Title") },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1 // Ensuring FAB's title is displayed in a single line
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = { Text("Description") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = date,
+                        onValueChange = { date = it },
+                        label = { Text("Date") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = time,
+                        onValueChange = { time = it },
+                        label = { Text("Time") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextButton(onClick = onDismiss) {
+                            Text("Cancel")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            onClick = {
+                                onAddTask(Tasks(0, title, description, date, time, false))
+                            }
+                        ) {
+                            Text("Add Task")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// For preview
+@Preview(showBackground = true)
+@Composable
+fun TasksPagePreview() {
+    DIUCampusScheduleTheme {
+        val navController = rememberNavController()
+        TasksPage(navController = navController)
     }
 }
