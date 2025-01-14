@@ -54,7 +54,7 @@ fun SettingsPage(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Dark Mode Card
@@ -232,7 +232,7 @@ fun SettingsPage(
                         .padding(16.dp)
                 ) {
                     Text(
-                        "Version: 1.0.0 (Beta)",
+                        "App Version: 1.0.0 (Beta)",
                         style = MaterialTheme.typography.bodyLarge.copy(color = Color.Red)
                     )
                     Spacer(modifier = Modifier.height(8.dp))

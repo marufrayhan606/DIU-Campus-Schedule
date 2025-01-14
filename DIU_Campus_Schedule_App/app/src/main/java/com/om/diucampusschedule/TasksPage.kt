@@ -67,7 +67,7 @@ fun TasksPage(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         ) {
             item {
                 Text(
