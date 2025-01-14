@@ -8,8 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -66,5 +69,15 @@ fun BottomNavigationBar(navController: NavController) {
                 unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
+    }
+}
+
+// for preview
+@Preview(showBackground = true)
+@Composable
+fun BottomNavigationBarPreview() {
+    DIUCampusScheduleTheme {
+        val navController = rememberNavController()
+        BottomNavigationBar(navController = navController)
     }
 }
