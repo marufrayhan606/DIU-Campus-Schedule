@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,7 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.om.diucampusschedule.models.Tasks
 import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun TasksPage(navController: NavHostController) {
     var taskList by remember {
@@ -46,17 +47,8 @@ fun TasksPage(navController: NavHostController) {
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = { AppTopBarWithAppName()
-            /*TopAppBar(
-                title = { Text("Tasks") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            )*/
-        },
-        bottomBar = {
-            BottomNavigationBar(navController)
-        },
+        topBar = { AppTopBarWithAppName() },
+        bottomBar = { BottomNavigationBar(navController) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showDialog = true },
@@ -68,15 +60,44 @@ fun TasksPage(navController: NavHostController) {
         },
         floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
+        val pendingTasks = taskList.filter { !it.isCompleted }
+        val completedTasks = taskList.filter { it.isCompleted }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            items(taskList) { task ->
+            item {
+                Text(
+                    text = "Pending Tasks",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            items(pendingTasks) { task ->
                 TaskCard(task = task, onUpdateTask = { updatedTask ->
                     taskList = taskList.map { if (it.id == task.id) updatedTask else it }
+                }, onDeleteTask = { deletedTask ->
+                    taskList = taskList.filter { it.id != deletedTask.id }
+                })
+            }
+            item {
+                Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).height(1.dp))
+            }
+            item {
+                Text(
+                    text = "Completed Tasks",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            items(completedTasks) { task ->
+                TaskCard(task = task, onUpdateTask = { updatedTask ->
+                    taskList = taskList.map { if (it.id == task.id) updatedTask else it }
+                }, onDeleteTask = { deletedTask ->
+                    taskList = taskList.filter { it.id != deletedTask.id }
                 })
             }
         }
@@ -94,8 +115,9 @@ fun TasksPage(navController: NavHostController) {
     }
 }
 
+
 @Composable
-fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit) {
+fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -167,11 +189,21 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit) {
                             color = Color.Gray
                         )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    IconButton(onClick = { onDeleteTask(task) }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Task",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Tasks) -> Unit) {
