@@ -25,14 +25,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             DIUCampusScheduleTheme {
                 val navController = rememberNavController()
-                NavGraph(navController = navController)
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationBar(navController)
+                    }
+                ) {
+                    innerPadding -> NavGraph(navController = navController, modifier = Modifier.padding(innerPadding))
+                }
             }
         }
     }
 }
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(navController = navController, startDestination = "class_routine"){
         composable("class_routine"){ ClassRoutinePage(navController) }  // This is the starting page
         composable("tasks"){ TasksPage(navController) }  // This is the second page
