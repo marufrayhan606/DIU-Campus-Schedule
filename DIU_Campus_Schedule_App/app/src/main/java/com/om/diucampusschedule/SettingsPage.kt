@@ -38,13 +38,13 @@ fun SettingsPage(
     val context = LocalContext.current
 
     Scaffold(
-        topBar = {
-            TopAppBar(
+        topBar = { AppTopBarWithAppName()
+            /*TopAppBar(
                 title = { Text("Settings") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
-            )
+            )*/
         },
         bottomBar = {
             BottomNavigationBar(navController)
@@ -234,7 +234,7 @@ fun SettingsPage(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        "Code written by day, debugged by night🤯. Developed by Ismam Ovi & Maruf Rayhan, who may or may not have generated half of it from ChatGPT👀. © 2025 Runs on hope and Ctrl+Z. If something breaks, it’s a skill issue (ours)\uD83D\uDE4F. Good luck!😎",
+                        "Code written by day, debugged by night🤯. Developed & still developing by Ismam Ovi & Maruf Rayhan, who may or may not have generated half of it from ChatGPT👀. © 2025 Runs on hope and Ctrl+Z. If something breaks, it’s a skill issue (ours)\uD83D\uDE4F. Good luck!😎",
                         style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.5.sp)
                     )
                 }

@@ -46,13 +46,13 @@ fun TasksPage(navController: NavHostController) {
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
+        topBar = { AppTopBarWithAppName()
+            /*TopAppBar(
                 title = { Text("Tasks") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
-            )
+            )*/
         },
         bottomBar = {
             BottomNavigationBar(navController)

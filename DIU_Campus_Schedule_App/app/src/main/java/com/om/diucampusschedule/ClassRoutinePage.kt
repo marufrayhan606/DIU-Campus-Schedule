@@ -21,13 +21,13 @@ import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 @Composable
 fun ClassRoutinePage(navController: NavHostController) {
     Scaffold(
-        topBar = {
-            TopAppBar(
+        topBar = { AppTopBarWithAppName()
+            /*TopAppBar(
                 title = { Text("Class Routine") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
-            )
+            )*/
         },
         bottomBar = {
             BottomNavigationBar(navController)
