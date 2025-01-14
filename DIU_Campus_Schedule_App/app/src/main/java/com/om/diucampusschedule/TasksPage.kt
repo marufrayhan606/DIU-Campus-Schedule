@@ -1,5 +1,6 @@
 package com.om.diucampusschedule
 
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -21,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +48,7 @@ fun TasksPage(navController: NavHostController) {
     var taskIdCounter by remember { mutableStateOf(taskList.size + 1) }
 
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = { AppTopBarWithAppName() },
@@ -72,8 +76,8 @@ fun TasksPage(navController: NavHostController) {
             item {
                 Text(
                     text = "Pending Tasks",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(vertical = 2.dp)
                 )
             }
             items(pendingTasks) { task ->
@@ -84,14 +88,37 @@ fun TasksPage(navController: NavHostController) {
                 })
             }
             item {
-                Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).height(1.dp))
+                Divider(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .height(1.dp))
             }
             item {
-                Text(
-                    text = "Completed Tasks",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+               Row(
+                   modifier = Modifier.fillMaxWidth(),
+                   horizontalArrangement = Arrangement.SpaceBetween
+               ){
+                   Text(
+                       text = "Completed Tasks",
+                       style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                       modifier = Modifier.padding(vertical = 2.dp)
+                   )
+                   Text(
+                       text = "Delete All",
+                       style = MaterialTheme.typography.bodySmall,
+                       modifier = Modifier
+                           .padding(vertical = 2.dp)
+                           .clickable {
+                               taskList = taskList.filter { !it.isCompleted }
+                               Toast.makeText(
+                                   context,
+                                   "All completed tasks deleted",
+                                   Toast.LENGTH_SHORT
+                               ).show()
+                           }
+
+                   )
+               }
             }
             items(completedTasks) { task ->
                 TaskCard(task = task, onUpdateTask = { updatedTask ->
@@ -128,7 +155,7 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(10.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -174,22 +201,29 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                 enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
                 exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
             ) {
-                Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = task.description,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontSize = 14.sp
-                    )
-                    if (task.date.isNotEmpty() && task.time.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+//                    /*Spacer(modifier = Modifier.height(8.dp))*/
+                    Column{
                         Text(
-                            text = "${task.date} at ${task.time}",
+                            text = task.description,
                             style = MaterialTheme.typography.bodySmall,
-                            fontSize = 14.sp,
-                            color = Color.Gray
+                            fontSize = 14.sp
                         )
+                        if (task.date.isNotEmpty() && task.time.isNotEmpty()) {
+                            Text(
+                                text = "${task.date} at ${task.time}",
+                                style = MaterialTheme.typography.bodySmall,
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    /*Spacer(modifier = Modifier.height(8.dp))*/
+
+                    // Delete button
                     IconButton(onClick = { onDeleteTask(task) }) {
                         Icon(
                             imageVector = Icons.Default.Delete,

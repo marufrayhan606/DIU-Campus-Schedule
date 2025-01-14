@@ -55,7 +55,7 @@ fun SettingsPage(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             // Dark Mode Card
             Card(
