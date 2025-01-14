@@ -216,7 +216,7 @@ fun SettingsPage(
                 }
             }
 
-            Spacer(modifier = Modifier.height(130.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             Divider(modifier = Modifier.fillMaxWidth().height(1.dp))
             // App Version Card
             Card(
@@ -232,7 +232,7 @@ fun SettingsPage(
                         .padding(16.dp)
                 ) {
                     Text(
-                        "App Version: 1.0.0 (Beta)",
+                        "App Version: 0.0.1 (Beta)",
                         style = MaterialTheme.typography.bodyLarge.copy(color = Color.Red)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
