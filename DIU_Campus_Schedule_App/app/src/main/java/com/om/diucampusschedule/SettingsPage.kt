@@ -54,7 +54,7 @@ fun SettingsPage(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             // Dark Mode Card
@@ -69,7 +69,7 @@ fun SettingsPage(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
