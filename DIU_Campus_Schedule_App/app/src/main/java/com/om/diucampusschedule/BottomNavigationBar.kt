@@ -1,5 +1,8 @@
 package com.om.diucampusschedule
 
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -9,6 +12,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -28,10 +33,10 @@ fun BottomNavigationBar(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.class_routine_icon),
                     contentDescription = "Class Routine",
-                    modifier = Modifier.scale(0.8f)
+                    modifier = Modifier.scale(0.7f)
                 )
            },
-            label = { Text("Class Routine") },
+            label = { Text("Class Routine", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Black,
                 unselectedIconColor = MaterialTheme.colorScheme.primary
@@ -44,10 +49,10 @@ fun BottomNavigationBar(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.tasks_icon),
                     contentDescription = "Tasks",
-                    modifier = Modifier.scale(0.8f)
+                    modifier = Modifier.scale(0.7f)
                 )
             },
-            label = { Text("Tasks") },
+            label = { Text("Tasks", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Black,
                 unselectedIconColor = MaterialTheme.colorScheme.primary
@@ -60,10 +65,10 @@ fun BottomNavigationBar(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.settings_icon),
                     contentDescription = "Settings",
-                    modifier = Modifier.scale(0.8f)
+                    modifier = Modifier.scale(0.7f)
                 )
             },
-            label = { Text("Settings") },
+            label = { Text("Settings", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Black,
                 unselectedIconColor = MaterialTheme.colorScheme.primary

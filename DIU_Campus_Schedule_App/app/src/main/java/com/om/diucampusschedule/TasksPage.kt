@@ -20,6 +20,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -178,6 +179,7 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                 Box(
                     modifier = Modifier
                         .size(40.dp) // Increase the clickable area
+                        .clip(CircleShape)
                         .background(
                             color = if (task.isCompleted) Color(0xFFE3F2FD) else Color.Transparent,
                             shape = CircleShape
