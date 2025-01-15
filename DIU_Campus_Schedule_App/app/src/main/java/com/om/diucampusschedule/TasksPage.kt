@@ -169,7 +169,7 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                     maxLines = 1 // Ensuring title is displayed in a single line
                 )
                 val animatedColor by animateColorAsState(
-                    targetValue = if (task.isCompleted) Color(0xFF1976D2) else Color.Gray,
+                    targetValue = if (task.isCompleted) MaterialTheme.colorScheme.surfaceDim else MaterialTheme.colorScheme.primary,
                     animationSpec = tween(500)
                 )
                 val scale by animateFloatAsState(
@@ -181,7 +181,7 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                         .size(40.dp) // Increase the clickable area
                         .clip(CircleShape)
                         .background(
-                            color = if (task.isCompleted) Color(0xFFE3F2FD) else Color.Transparent,
+                            color = if (task.isCompleted) MaterialTheme.colorScheme.primary else Color.Transparent,
                             shape = CircleShape
                         )
                         .clickable {

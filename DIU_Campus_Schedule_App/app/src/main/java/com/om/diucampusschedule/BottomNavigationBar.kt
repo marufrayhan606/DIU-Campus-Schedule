@@ -23,7 +23,7 @@ import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 fun BottomNavigationBar(navController: NavController) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.primary
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
     ) {
         val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
         NavigationBarItem(
@@ -38,7 +38,7 @@ fun BottomNavigationBar(navController: NavController) {
            },
             label = { Text("Class Routine", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.Black,
+                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
@@ -54,7 +54,7 @@ fun BottomNavigationBar(navController: NavController) {
             },
             label = { Text("Tasks", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.Black,
+                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )
@@ -70,7 +70,7 @@ fun BottomNavigationBar(navController: NavController) {
             },
             label = { Text("Settings", fontSize = 10.sp) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.Black,
+                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 unselectedIconColor = MaterialTheme.colorScheme.primary
             )
         )

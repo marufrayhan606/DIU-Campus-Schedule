@@ -2,6 +2,7 @@ package com.om.diucampusschedule
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -46,9 +47,10 @@ fun ClassRoutinePage(navController: NavHostController) {
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                label = { Text("Search Routine") },
+                label = { Text("Search routine") },
+                /*shape = RoundedCornerShape(20.dp),*/
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -58,7 +60,7 @@ fun ClassRoutinePage(navController: NavHostController) {
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = Color.White
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text("Search")
