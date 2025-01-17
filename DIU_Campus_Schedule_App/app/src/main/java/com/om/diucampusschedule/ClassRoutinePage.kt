@@ -30,7 +30,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.om.diucampusschedule.models.ImageNameMapper
 import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +61,7 @@ fun ClassRoutinePage(navController: NavHostController) {
                 },
                 label = { Text("Search routine") },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -96,7 +95,7 @@ fun ClassRoutinePage(navController: NavHostController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp),
+                    .height(220.dp)
             ) {
                 if (selectedImage != null) {
                     Image(

@@ -26,9 +26,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons.Filled
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +39,6 @@ import androidx.compose.ui.window.DialogProperties
 import java.io.File
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
 import kotlinx.coroutines.launch
 import readTasksFromCsv
 import writeTasksToCsv
@@ -247,15 +246,16 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
     var expanded by remember { mutableStateOf(false) }
 
     ElevatedCard(
+        shape = MaterialTheme.shapes.large,
+        onClick = { expanded = !expanded },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { expanded = !expanded },
+            .padding(vertical = 8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
-        ),
-        shape = MaterialTheme.shapes.large
+        )
+
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -341,6 +341,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
 @Preview(showBackground = true)
 @Composable
 private fun defaultPreview() {
-    TasksPage(navController = rememberNavController())
+    val navController = rememberNavController()
+    TasksPage(navController)
 }
 
