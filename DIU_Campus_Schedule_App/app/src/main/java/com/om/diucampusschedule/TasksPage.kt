@@ -258,7 +258,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
         shape = MaterialTheme.shapes.large
     ) {
         Column(
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -271,7 +271,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                     maxLines = 1 // Ensuring title is displayed in a single line
                 )
                 val animatedColor by animateColorAsState(
-                    targetValue = if (task.isCompleted) MaterialTheme.colorScheme.surfaceDim else MaterialTheme.colorScheme.primary,
+                    targetValue = MaterialTheme.colorScheme.primary,
                     animationSpec = tween(500)
                 )
                 val scale by animateFloatAsState(
@@ -283,7 +283,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                         .size(24.dp) // Increase the clickable area
                         .clip(CircleShape)
                         .background(
-                            color = if (task.isCompleted) MaterialTheme.colorScheme.primary else Color.Transparent,
+                            color = Color.Transparent,
                             shape = CircleShape
                         )
                         .clickable {
