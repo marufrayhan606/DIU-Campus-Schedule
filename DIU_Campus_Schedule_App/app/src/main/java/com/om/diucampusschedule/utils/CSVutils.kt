@@ -1,3 +1,5 @@
+package com.om.diucampusschedule.utils
+
 import com.om.diucampusschedule.models.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -7,6 +9,7 @@ import org.apache.commons.csv.CSVPrinter
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.util.UUID
 
 suspend fun readTasksFromCsv(file: File): List<Task> {
     return withContext(Dispatchers.IO) {
@@ -16,7 +19,7 @@ suspend fun readTasksFromCsv(file: File): List<Task> {
                 val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
                 for (csvRecord in csvParser) {
                     val task = Task(
-                        id = csvRecord.get("id").toInt(),
+                        id = UUID.fromString(csvRecord.get("id")),
                         title = csvRecord.get("title"),
                         description = csvRecord.get("description"),
                         date = csvRecord.get("date"),
@@ -37,7 +40,7 @@ suspend fun writeTasksToCsv(file: File, tasks: List<Task>) {
             val csvPrinter = CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("id", "title", "description", "date", "time", "isCompleted"))
             for (task in tasks) {
                 csvPrinter.printRecord(
-                    task.id,
+                    task.id.toString(),
                     task.title,
                     task.description,
                     task.date,
