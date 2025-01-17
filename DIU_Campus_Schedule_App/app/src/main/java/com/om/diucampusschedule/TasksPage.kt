@@ -40,9 +40,9 @@ import java.io.File
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import readTasksFromCsv
-import writeTasksToCsv
-import kotlin.math.exp
+import com.om.diucampusschedule.utils.readTasksFromCsv
+import com.om.diucampusschedule.utils.writeTasksToCsv
+import java.util.UUID
 
 
 @Composable
@@ -51,14 +51,12 @@ fun TasksPage(navController: NavHostController) {
     val csvFile = File(context.filesDir, "tasks.csv")
 
     var taskList by remember { mutableStateOf(listOf<Task>()) }
-    var taskIdCounter by remember { mutableStateOf(1) }
     var showDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             taskList = readTasksFromCsv(csvFile)
-            taskIdCounter = taskList.size + 1
         }
     }
 
@@ -152,8 +150,7 @@ fun TasksPage(navController: NavHostController) {
         AddTaskDialog(
             onDismiss = { showDialog = false },
             onAddTask = { newTask ->
-                taskList = taskList + newTask.copy(id = taskIdCounter)
-                taskIdCounter++
+                taskList = taskList + newTask
                 coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 showDialog = false
             }
@@ -229,7 +226,7 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
                             onClick = {
-                                onAddTask(Task(0, title, description, date, time, false))
+                                onAddTask(Task(UUID.randomUUID(), title, description, date, time, false))
                                 onDismiss()
                             }
                         ) {
@@ -241,6 +238,7 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
         }
     }
 }
+
 
 @Composable
 fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> Unit) {
@@ -325,17 +323,20 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                                 color = Color.Gray
                             )
                         }
+
                     }
-                    // Delete button
-                    IconButton(onClick = { onDeleteTask(task) }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete Task",
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    }
+
                 }
             }
+                // Delete button
+            IconButton(onClick = { onDeleteTask(task) }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete Task",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+
         }
     }
 }

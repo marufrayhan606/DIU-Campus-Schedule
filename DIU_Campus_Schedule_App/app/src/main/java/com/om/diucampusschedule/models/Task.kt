@@ -1,7 +1,9 @@
 package com.om.diucampusschedule.models
 
-data class Task (
-    val id: Int,
+import java.util.UUID
+
+data class Task(
+    val id: UUID = UUID.randomUUID(),
     val title: String,
     val description: String,
     val date: String,
