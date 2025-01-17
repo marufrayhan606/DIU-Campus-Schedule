@@ -29,14 +29,18 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import java.io.File
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
 
 import kotlinx.coroutines.launch
 import readTasksFromCsv
@@ -261,7 +265,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                     maxLines = 1 // Ensuring title is displayed in a single line
                 )
                 val animatedColor by animateColorAsState(
-                    targetValue = if (task.isCompleted) MaterialTheme.colorScheme.surfaceDim else MaterialTheme.colorScheme.primary,
+                    targetValue = if (task.isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary,
                     animationSpec = tween(500)
                 )
                 val scale by animateFloatAsState(
@@ -270,10 +274,10 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                 )
                 Box(
                     modifier = Modifier
-                        .size(40.dp) // Increase the clickable area
+                        .size(24.dp) // Increase the clickable area
                         .clip(CircleShape)
                         .background(
-                            color = if (task.isCompleted) MaterialTheme.colorScheme.primary else Color.Transparent,
+                            color = Color.Transparent,
                             shape = CircleShape
                         )
                         .clickable {
@@ -283,7 +287,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = if (task.isCompleted) Icons.Filled.Check else Icons.Outlined.CheckCircle,
+                        imageVector = if (task.isCompleted) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle,
                         contentDescription = "Check",
                         tint = animatedColor,
                         modifier = Modifier.size(24.dp)
@@ -328,3 +332,11 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
     }
 }
 
+
+/*@Preview(showBackground = true)
+@Composable
+fun TasksPagePreview() {
+    DIUCampusScheduleTheme {
+        TasksPage(navController = rememberNavController())
+    }
+}*/
