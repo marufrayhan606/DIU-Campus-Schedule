@@ -245,8 +245,8 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
                                 },
                                 label = { Text("Title") },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
-                                maxLines = 1,
+                                shape = RoundedCornerShape(26.dp),
+                                singleLine = true,
                                 isError = showError
                             )
                             if (showError) {
@@ -263,7 +263,7 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
                                 onValueChange = { description = it },
                                 label = { Text("Description") },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(26.dp)
                             )
                             Spacer(modifier = Modifier.height(8.dp))
 
@@ -271,7 +271,7 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
                             Button(
                                 onClick = { datePickerDialog.show() },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(26.dp)
                             ) {
                                 Text(text = if (date.isEmpty()) "Select Date" else date)
                             }
@@ -282,7 +282,7 @@ fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
                             Button(
                                 onClick = { timePickerDialog.show() },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(26.dp)
                             ) {
                                 Text(text = if (time.isEmpty()) "Select Time" else time)
                             }

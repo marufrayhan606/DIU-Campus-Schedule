@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -100,6 +102,8 @@ fun AppTopBarWithAppName(){
     val appNameFont = FontFamily(Font(R.font.quartzo_bold))
 
     TopAppBar(
+        modifier = Modifier
+            .height(60.dp),
         title = {
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -107,6 +111,7 @@ fun AppTopBarWithAppName(){
             ){
                 Text(
                     text = "DIU CAMPUS SCHEDULE",
+                    modifier = Modifier.padding(top = 6.dp),
                     style = TextStyle(
                         fontFamily = appNameFont,
                         fontWeight = FontWeight.Normal,
