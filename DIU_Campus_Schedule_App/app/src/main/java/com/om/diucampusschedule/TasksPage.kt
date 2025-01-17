@@ -82,13 +82,13 @@ fun TasksPage(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
+                .padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         ) {
             item {
                 Text(
                     text = "Pending Tasks",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(vertical = 2.dp)
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
             items(pendingTasks) { task ->

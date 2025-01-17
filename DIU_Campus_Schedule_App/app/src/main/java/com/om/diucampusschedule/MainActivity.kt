@@ -109,8 +109,8 @@ fun AppTopBarWithAppName(){
                     text = "DIU CAMPUS SCHEDULE",
                     style = TextStyle(
                         fontFamily = appNameFont,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 )
