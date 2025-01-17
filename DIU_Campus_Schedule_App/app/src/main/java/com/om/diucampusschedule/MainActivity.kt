@@ -97,7 +97,7 @@ fun NavGraph(
 @Composable
 fun AppTopBarWithAppName(){
 
-    val appNameFont = FontFamily(Font(R.font.barrio_regular))
+    val appNameFont = FontFamily(Font(R.font.quartzo_bold))
 
     TopAppBar(
         title = {
@@ -110,7 +110,7 @@ fun AppTopBarWithAppName(){
                     style = TextStyle(
                         fontFamily = appNameFont,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
+                        fontSize = 26.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 )
