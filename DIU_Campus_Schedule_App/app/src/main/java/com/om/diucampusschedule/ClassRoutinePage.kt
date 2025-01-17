@@ -127,7 +127,7 @@ fun ClassRoutinePage(navController: NavHostController) {
                             color = Color.Gray
                         )
                         Text(
-                            "Who needs a boyfriend or girlfriend when your developer understands your pain better than anyone else?\uD83D\uDC94 While they’re busy forgetting your favorite coffee order, I’m over here coding an app that remembers your schedule, sends you reminders, and even saves you from the endless routine-hunting nightmare.\n" +
+                            "Who needs a boyfriend or girlfriend when your developer understands your pain better than anyone else?\uD83D\uDC94 While they’re busy forgetting your favorite coffee order, We're over here coding an app that remembers your schedule, sends you reminders, and even saves you from the endless routine-hunting nightmare.\n" +
                                     "Relationships might give you butterflies, but this app will give you peace of mind – and isn’t that what we all really need?\uD83D\uDE0E❤\uFE0F Until it’s ready to sweep you off your feet, enjoy the chaos, and remember: your developer’s dedication >>> late-night texts.\uD83D\uDE02",
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                             textAlign = TextAlign.Center,

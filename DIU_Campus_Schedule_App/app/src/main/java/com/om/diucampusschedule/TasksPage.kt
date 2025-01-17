@@ -42,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import readTasksFromCsv
 import writeTasksToCsv
+import kotlin.math.exp
 
 
 @Composable
@@ -67,8 +68,8 @@ fun TasksPage(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Task")
             }
@@ -253,7 +254,7 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
             .padding(vertical = 8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         )
 
     ) {
@@ -261,14 +262,15 @@ fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> U
             modifier = Modifier.padding(16.dp)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = task.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 18.sp,
+                    fontSize = 15.sp,
                     modifier = Modifier.weight(1f),
-                    maxLines = 1 // Ensuring title is displayed in a single line
+                    maxLines = if(expanded) Int.MAX_VALUE else 1 // Ensuring title is displayed in a single line
                 )
                 val animatedColor by animateColorAsState(
                     targetValue = MaterialTheme.colorScheme.primary,
