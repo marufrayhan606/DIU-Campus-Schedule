@@ -158,7 +158,8 @@ fun FullScreenImageDialog(imageResId: Int, onDismiss: () -> Unit) {
     var offset by remember { mutableStateOf(Offset.Zero) }
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
         scale *= zoomChange
-        offset += offsetChange
+        // Increase the sensitivity for translation
+        offset += Offset(offsetChange.x * 2f, offsetChange.y * 2f)
     }
 
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
