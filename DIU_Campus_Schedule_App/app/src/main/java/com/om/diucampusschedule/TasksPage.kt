@@ -1,55 +1,64 @@
 package com.om.diucampusschedule
 
-import android.widget.Toast
-import androidx.compose.animation.*
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.om.diucampusschedule.models.Task
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import java.io.File
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.om.diucampusschedule.models.Tasks
-import com.om.diucampusschedule.ui.theme.DIUCampusScheduleTheme
+
+import kotlinx.coroutines.launch
+import readTasksFromCsv
+import writeTasksToCsv
 
 
 @Composable
 fun TasksPage(navController: NavHostController) {
-    var taskList by remember {
-        mutableStateOf(
-            listOf(
-                Tasks(1, "Task 1", "Description 1", "2025-01-15", "10:00 AM", false),
-                Tasks(2, "Task 2", "Description 2", "2025-01-16", "11:00 AM", true)
-            )
-        )
-    }
-    var taskIdCounter by remember { mutableStateOf(taskList.size + 1) }
-
-    var showDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val csvFile = File(context.filesDir, "tasks.csv")
+
+    var taskList by remember { mutableStateOf(listOf<Task>()) }
+    var taskIdCounter by remember { mutableStateOf(1) }
+    var showDialog by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            taskList = readTasksFromCsv(csvFile)
+            taskIdCounter = taskList.size + 1
+        }
+    }
 
     Scaffold(
         topBar = { AppTopBarWithAppName() },
@@ -84,48 +93,50 @@ fun TasksPage(navController: NavHostController) {
             items(pendingTasks) { task ->
                 TaskCard(task = task, onUpdateTask = { updatedTask ->
                     taskList = taskList.map { if (it.id == task.id) updatedTask else it }
+                    coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 }, onDeleteTask = { deletedTask ->
                     taskList = taskList.filter { it.id != deletedTask.id }
+                    coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 })
             }
             item {
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .height(1.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .height(1.dp)
+                )
             }
             item {
-               Row(
-                   modifier = Modifier.fillMaxWidth(),
-                   horizontalArrangement = Arrangement.SpaceBetween
-               ){
-                   Text(
-                       text = "Completed Tasks",
-                       style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                       modifier = Modifier.padding(vertical = 2.dp)
-                   )
-                   Text(
-                       text = "Delete All",
-                       style = MaterialTheme.typography.bodySmall,
-                       modifier = Modifier
-                           .padding(vertical = 2.dp)
-                           .clickable {
-                               taskList = taskList.filter { !it.isCompleted }
-                               Toast.makeText(
-                                   context,
-                                   "All completed tasks deleted",
-                                   Toast.LENGTH_SHORT
-                               ).show()
-                           }
-
-                   )
-               }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Completed Tasks",
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                    Text(
+                        text = "Delete All",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .padding(vertical = 2.dp)
+                            .clickable {
+                                taskList = taskList.filter { !it.isCompleted }
+                                coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
+                                Toast.makeText(context, "All completed tasks deleted", Toast.LENGTH_SHORT).show()
+                            }
+                    )
+                }
             }
             items(completedTasks) { task ->
                 TaskCard(task = task, onUpdateTask = { updatedTask ->
                     taskList = taskList.map { if (it.id == task.id) updatedTask else it }
+                    coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 }, onDeleteTask = { deletedTask ->
                     taskList = taskList.filter { it.id != deletedTask.id }
+                    coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 })
             }
         }
@@ -137,15 +148,96 @@ fun TasksPage(navController: NavHostController) {
             onAddTask = { newTask ->
                 taskList = taskList + newTask.copy(id = taskIdCounter)
                 taskIdCounter++
+                coroutineScope.launch { writeTasksToCsv(csvFile, taskList) }
                 showDialog = false
             }
         )
     }
 }
 
+@Composable
+fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Task) -> Unit) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
+        ) {
+            Card(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    var title by remember { mutableStateOf("") }
+                    var description by remember { mutableStateOf("") }
+                    var date by remember { mutableStateOf("") }
+                    var time by remember { mutableStateOf("") }
+
+                    OutlinedTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text("Title") },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = { Text("Description") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = date,
+                        onValueChange = { date = it },
+                        label = { Text("Date") },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = time,
+                        onValueChange = { time = it },
+                        label = { Text("Time") },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextButton(onClick = onDismiss) {
+                            Text("Cancel")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            onClick = {
+                                onAddTask(Task(0, title, description, date, time, false))
+                                onDismiss()
+                            }
+                        ) {
+                            Text("Add Task")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
-fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -> Unit) {
+fun TaskCard(task: Task, onUpdateTask: (Task) -> Unit, onDeleteTask: (Task) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -207,7 +299,6 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-//                    /*Spacer(modifier = Modifier.height(8.dp))*/
                     Column{
                         Text(
                             text = task.description,
@@ -223,8 +314,6 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
                             )
                         }
                     }
-                    /*Spacer(modifier = Modifier.height(8.dp))*/
-
                     // Delete button
                     IconButton(onClick = { onDeleteTask(task) }) {
                         Icon(
@@ -239,92 +328,3 @@ fun TaskCard(task: Tasks, onUpdateTask: (Tasks) -> Unit, onDeleteTask: (Tasks) -
     }
 }
 
-
-
-@Composable
-fun AddTaskDialog(onDismiss: () -> Unit, onAddTask: (Tasks) -> Unit) {
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-        ) {
-            Card(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    var title by remember { mutableStateOf("") }
-                    var description by remember { mutableStateOf("") }
-                    var date by remember { mutableStateOf("") }
-                    var time by remember { mutableStateOf("") }
-
-                    OutlinedTextField(
-                        value = title,
-                        onValueChange = { title = it },
-                        label = { Text("Title") },
-                        modifier = Modifier.fillMaxWidth(),
-                        maxLines = 1 // Ensuring FAB's title is displayed in a single line
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = description,
-                        onValueChange = { description = it },
-                        label = { Text("Description") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = date,
-                        onValueChange = { date = it },
-                        label = { Text("Date") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = time,
-                        onValueChange = { time = it },
-                        label = { Text("Time") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        TextButton(onClick = onDismiss) {
-                            Text("Cancel")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            onClick = {
-                                onAddTask(Tasks(0, title, description, date, time, false))
-                            }
-                        ) {
-                            Text("Add Task")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// For preview
-@Preview(showBackground = true)
-@Composable
-fun TasksPagePreview() {
-    DIUCampusScheduleTheme {
-        val navController = rememberNavController()
-        TasksPage(navController = navController)
-    }
-}

@@ -1,6 +1,6 @@
 package com.om.diucampusschedule.models
 
-data class Tasks (
+data class Task (
     val id: Int,
     val title: String,
     val description: String,
