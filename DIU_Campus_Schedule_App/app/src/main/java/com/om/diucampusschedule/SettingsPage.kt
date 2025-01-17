@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
@@ -45,7 +46,7 @@ fun SettingsPage(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         ) {
             item {
                 // Dark Mode Card
@@ -158,7 +159,7 @@ fun SettingsPage(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(bottom = 16.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -199,7 +200,7 @@ fun PremiumCard(title: String, isTogglable: Boolean = false, isChecked: Boolean 
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -259,8 +260,10 @@ fun DeveloperProfile(name: String, id: String, imageUrl: Int, facebookUrl: Strin
                         Image(
                             painter = painterResource(id = R.drawable.facebook),
                             contentDescription = "Facebook",
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(32.dp)
+                                .clip(RoundedCornerShape(6.dp))
                                 .clickable {
                                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl))
                                     context.startActivity(intent)
@@ -270,8 +273,10 @@ fun DeveloperProfile(name: String, id: String, imageUrl: Int, facebookUrl: Strin
                         Image(
                             painter = painterResource(id = R.drawable.github),
                             contentDescription = "Github",
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(32.dp)
+                                .clip(RoundedCornerShape(6.dp))
                                 .clickable {
                                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
                                     context.startActivity(intent)
@@ -282,4 +287,10 @@ fun DeveloperProfile(name: String, id: String, imageUrl: Int, facebookUrl: Strin
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SettingsPagePreview() {
+    SettingsPage(navController = NavHostController(LocalContext.current), isDarkModeEnabled = false, onDarkModeToggle = {})
 }
