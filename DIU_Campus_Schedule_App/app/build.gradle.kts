@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.om.diucampusschedule"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "0.0.1"
