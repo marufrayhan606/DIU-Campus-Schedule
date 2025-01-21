@@ -170,7 +170,7 @@ fun SettingsPage(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "App Version: 0.0.1 (Beta)",
+                            text = "App Version: 0.0.2 (Beta)",
                             style = MaterialTheme.typography.bodyLarge.copy(color = Color.Red)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
