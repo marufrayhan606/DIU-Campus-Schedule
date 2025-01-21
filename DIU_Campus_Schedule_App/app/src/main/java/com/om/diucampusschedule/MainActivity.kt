@@ -108,6 +108,7 @@ fun AppTopBarWithAppName(){
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
+
             ){
                 Text(
                     text = "DIU CAMPUS SCHEDULE",
