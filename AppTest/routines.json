@@ -1,0 +1,47 @@
+[
+    {
+        "day": "Saturday",
+        "time": "08:30 AM - 10:00 AM",
+        "room": "611",
+        "courseCode": "ENG101",
+        "teacherInitial": "JC",
+        "batch": "44",
+        "section": "F"
+    },
+    {
+        "day": "Saturday",
+        "time": "10:00 AM - 11:30 AM",
+        "room": "611",
+        "courseCode": "SE113",
+        "teacherInitial": "SA",
+        "batch": "44",
+        "section": "G"
+    },
+    {
+        "day": "Saturday",
+        "time": "11:30 AM - 01:00 PM",
+        "room": "611",
+        "courseCode": "SE222",
+        "teacherInitial": "SP",
+        "batch": "42",
+        "section": "A"
+    },
+    {
+        "day": "Saturday",
+        "time": "01:00 PM - 02:30 PM",
+        "room": "611",
+        "courseCode": "ENG101",
+        "teacherInitial": "JC",
+        "batch": "44",
+        "section": "G"
+    },
+    {
+        "day": "Thursday",
+        "time": "02:30 PM - 04:00 PM",
+        "room": "614",
+        "courseCode": "CS335",
+        "teacherInitial": "AE",
+        "batch": "36",
+        "section": "A"
+    }
+]
